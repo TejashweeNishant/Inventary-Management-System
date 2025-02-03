@@ -23,7 +23,7 @@ Because why settle for one when you can do both?! 🤷‍♂️
 
 JSON is great for structured data and scalability.
 Text files are perfect for those who love simplicity and don’t need all the bells and whistles (aka me at 2 AM). 😴
-Installation
-Clone the repo
-Run the Python files
-Start managing your inventory like a pro 🦸‍♂️
+Installation:
+->Clone the repo
+->Run the Python files
+->Start managing your inventory like a pro 🦸‍♂️
