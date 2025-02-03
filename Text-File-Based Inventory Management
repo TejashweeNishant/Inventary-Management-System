@@ -1,0 +1,95 @@
+#Noting the time of transaction
+import time
+
+#Reading the Inventory
+fd=open('inventry.txt','r')
+products=fd.read().split('\n')
+fd.close()
+
+#Taking user input
+ui_product_id = input("Enter product ID:")
+ui_product_qn = input("Enter product Quantity:")
+ui_username=input("Enter your name:")
+ui_phone=input("Enter your Phone no. :")
+ui_mail=input("Enter your email_id :")
+
+updated_product_lst = []
+
+#Going through each product detail
+for product in products:
+    
+    prod_details = product.split(',')
+
+    #checking if product exist or not
+    if product.split(',')[0] == ui_product_id:
+
+        #If we are having enough quantity
+        if (int(ui_product_qn)<=int(prod_details[3])):
+            
+            print("--------------------")
+            
+            print("Product Name : ", prod_details[1])
+            print("Price : ", prod_details[2])
+            print("Quantity : ", ui_product_qn)
+            
+            print("----------------------")
+            
+            print("Billing Amount :", int(ui_product_qn)*int(prod_details[2]))
+            
+            print('-----------------------')
+
+            #updating inventory list
+            prod_details[3] =str( int(prod_details[3]) - int(ui_product_qn))
+
+            #Generating Sales in Sales.txt
+            fd= open("Sales.txt","a")
+            sales_detail = ui_username +", "+ui_phone+", "+ui_mail+", "+ui_product_id+", "+prod_details[1]+", "+ui_product_qn +", "+str(int(ui_product_qn)*int(prod_details[2]))+", " + " "+time.ctime()+"\n"
+            fd.write(sales_detail)
+            fd.close()                                                                            
+                                                                                        
+        
+
+        #If we aren't having enough quantity
+        else:
+            print("SORRY, We are not  having enough quantity.")
+            print('Available quantity:',prod_details[3])
+            print("Would you like to purchase it?")
+
+            ch=input("PRESS Y/N")
+            #if you want to purchase the  available quantity
+            if(ch == 'Y' or ch == 'y'):
+                print("--------------------")
+                print("Product Name : ", prod_details[1])
+                print("Price : ", prod_details[2])
+                print("Quantity : ", prod_details[3])
+                print("----------------------")
+                print("Billing Amount :", int(prod_details[3])*int(prod_details[2]))
+                print('-----------------------')
+
+                #Generating Sales in Sales.txt
+                fd= open("Sales.txt","a")
+                sales_detail = ui_username +", "+ui_phone+", "+ui_mail+", "+ui_product_id+", "+prod_details[1]+", "+prod_details[3] +", "+str(int(prod_details[3])*int(prod_details[2]))+", " + " "+time.ctime()+"\n"
+                fd.write(sales_detail)
+                fd.close() 
+
+                #updating inventory list
+                prod_details[3] ='0'
+                
+            else:
+                print("THANK YOU!!")
+
+
+    updated_product_lst.append(prod_details)
+
+lst=[]
+for i in updated_product_lst:
+    prod = i[0]+","+i[1]+","+i[2]+","+i[3]+'\n'
+    lst.append(prod)
+
+lst[-1] = lst[-1][:-1]
+fd = open("inventry.txt",'w')
+for i in lst:
+    fd.write(i)
+fd.close()
+print('-----------------------')
+print('Inventory Updated')
