@@ -1,0 +1,63 @@
+#importing libraries
+import json
+import time
+
+sales=''
+
+
+#Loading the inventory record from json to string
+fd=open("Record.json",'r')
+fd.read()
+fd.close()
+
+#converting the string records to the json/dictionaries
+js=json.dumps(record)
+record=json.loads(js)
+
+for key in record.keys():
+    print(key,":",record[key]['Name'],",",record[key]['price'],",",record[key]['Qn'])
+    
+ui_name = str(input("Enter your Name: "))
+ui_ph = str(input("Enter phone number: "))
+ui_mail = str(input("Enter mail ID: "))
+ui_pr = str(input("Enter Product ID: "))
+ui_qn = int(input("Enter Quantity : "))
+
+if record[ui_pr]['Qn'] >= ui_qn:
+    print('Name:',record[ui_pr]['Name'])
+    print('price:',record[ui_pr]['price'],"RS")
+    print("quantity:",ui_qn)
+    print("Total Amount:",record[ui_pr]['price']*ui_qn,"RS")
+
+    sales=ui_name+","+ui_ph+","+ui_mail+","+ui_pr+","+record[ui_pr]["Name"]+","+str(ui_qn)+","+str(record[ui_pr]['price']*ui_qn)+","+time.ctime()+"\n"
+
+    record[ui_pr]['Qn']=record[ui_pr]['Qn'] - ui_qn
+
+    
+else:
+    print("SORRY, We are not  having enough quantity.")
+    print('Available quantity:',record[ui_pr]["Qn"])
+    print("Would you like to purchase it?")
+
+    ch=input("PRESS Y/N")
+    #if you want to purchase the  available quantity
+    if(ch == 'Y' or ch == 'y'):
+        print('Name:',record[ui_pr]['Name'])
+        print('price:',record[ui_pr]['price'],"RS")
+        print("quantity:",record[ui_pr]["Qn"])
+        print("Total Amount:",record[ui_pr]['price']*record[ui_pr]["Qn"],"RS")
+        sales=ui_name+","+ui_ph+","+ui_mail+","+ui_pr+","+record[ui_pr]["Name"]+","+str(record[ui_pr]['Qn'])+","+str(record[ui_pr]['price']*record[ui_pr]['Qn'])+","+time.ctime()+"\n"
+        record[ui_pr]['Qn']=0
+
+    else:print("THANK YOU!")
+
+
+
+fd=open("Record.json",'w')
+fd.write(js)
+fd.close()
+
+    
+fd=open('Trans.csv','a')
+fd.write(sales)
+fd.close()
